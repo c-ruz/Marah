@@ -1,7 +1,8 @@
 package api
 
 import api.GameApi.{as, complete, entity, get, path, post}
-import api.types.base.{Game, GridGame, StackGame}
+import api.types.base.grid.{GridGame, GridGameSnapshot}
+import api.types.base.Game
 import api.types.components.{Cell, CellEntity, CellEntityAttribute, ScoreView}
 import controller.GameController
 import model.actions.Action
@@ -40,13 +41,6 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
         deserializationError("Game deserialization not supported")
 
       override def write(obj: Game): JsValue = obj match {
-        case g: StackGame => JsObject(
-          "direction" -> JsString(g.direction),
-          "cells" -> g.cells.toJson,
-          "scores" -> g.score.toJson,
-          "topBarMessage" -> g.topBarMessage.toJson,
-          "menuActions" -> g.menuActions.toJson
-        )
         case g: GridGame => JsObject(
           "gridSize" -> JsObject(
             "x" -> JsNumber(g.gridSize._1),
@@ -81,19 +75,23 @@ object GameApi extends Directives with JsonSupport {
 
   private val controller: GameController = new GameController()
 
+  private var controllerSnapshot = new GridGameSnapshot(controller)
+  private def resetSnapshot(): Unit = controllerSnapshot = new GridGameSnapshot(controller)
+
   implicit def string2ActionResult(s: String): ActionResult = Success(s)
 
   def main(args: Array[String]): Unit = {
     val route = {
       path("state") {
         get {
-          complete(controller)
+          resetSnapshot()
+          complete(controllerSnapshot)
         }
       } ~
         path("actions") {
           post {
             entity(as[String]) { actionId =>
-              val action = controller.findActionById(actionId)
+              val action = controllerSnapshot.findActionById(actionId)
               if (action.isDefined) {
                 val result: ActionResult = action.get.doAction(controller)
                 complete(result)

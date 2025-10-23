@@ -1,6 +1,5 @@
 package api.types.components
 
-import api.types.base.GridGame
 import model.actions.Action
 
 /**
