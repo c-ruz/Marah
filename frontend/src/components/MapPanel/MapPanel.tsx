@@ -45,9 +45,6 @@ function MapPanel({ panel }: PanelProps) {
           backgroundSize: 'cover',
           gridColumn: x + 1,
           gridRow: y + 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           borderRadius: '1em',
         }}
       >
@@ -55,7 +52,7 @@ function MapPanel({ panel }: PanelProps) {
           disableRipple
           variant="text"
           size="small"
-          sx={{ width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}
+          sx={{ width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'center', overflow: 'auto' }}
           onClick={handleClick}
           disabled={actions.concat(entities.flatMap(entity => entity.actions)).length === 0}
         >
