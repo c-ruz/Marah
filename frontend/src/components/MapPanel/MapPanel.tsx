@@ -18,12 +18,12 @@ function MapPanel({ panel }: PanelProps) {
 
   const backgroundImageUrl = img ? `url(${API_URL}/resources/static/${img})` : 'none'
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = async (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
     if (actions.length == 1) {
       // If there's only one action, perform it directly
-      doAction(actions[0])
-      fetchGameState()
+      await doAction(actions[0])
+      await fetchGameState()
     }
     else {
       setAnchorEl(event.currentTarget)
@@ -39,6 +39,8 @@ function MapPanel({ panel }: PanelProps) {
       <Paper
         elevation={3}
         sx={{
+          minWidth: '300px',
+          minHeight: '300px',
           backgroundImage: backgroundImageUrl,
           backgroundSize: 'cover',
           gridColumn: x + 1,

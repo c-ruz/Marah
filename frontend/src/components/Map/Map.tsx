@@ -13,7 +13,6 @@ function Map() {
         gridTemplateColumns: `repeat(${maxX}, 1fr)`,
         gridTemplateRows: `repeat(${maxY}, 1fr)`,
         gap: 1,
-        width: '100%',
         height: '100%',
       }}
     >
