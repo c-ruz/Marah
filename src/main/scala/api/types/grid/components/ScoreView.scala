@@ -1,4 +1,4 @@
-package api.types.components
+package api.types.grid.components
 
 /**
  * Wrapper for any score shown in the bottom menu of 

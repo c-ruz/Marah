@@ -1,7 +1,7 @@
-package api.types.base.grid
+package api.types.grid
 
 import api.types.base.Game
-import api.types.components.Cell
+import api.types.grid.components.Cell
 
 abstract class GridGame extends Game {
 

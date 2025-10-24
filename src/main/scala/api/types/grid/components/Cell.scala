@@ -1,4 +1,4 @@
-package api.types.components
+package api.types.grid.components
 
 import model.actions.Action
 

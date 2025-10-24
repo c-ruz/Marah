@@ -1,4 +1,4 @@
-package api.types.components
+package api.types.grid.components
 
 /** Wrapper for an attribute to be shown inside a tooltip when hovering a cell
   * entity.
