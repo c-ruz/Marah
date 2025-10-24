@@ -85,25 +85,39 @@ function EntityDisplay({ entity }: EntityDisplayProps) {
         placement="top"
         slots={{ transition: Zoom }}
       >
-        <Box>
-            <Button
-              disableRipple
-              onClick={handleClick}
-              disabled={entity.actions.length === 0}
-            >
-              <Box
-                component="img"
-                src={fallbackSrc}
-                alt={entity.name}
-                onError={handleImageError}
-                sx={{
-                  width: '200px',
-                  height: '200px',
-                  objectFit: 'contain',
-                }}
-              />
-            </Button>
-        </Box>
+        {actions.length ? (
+          <Button
+            disableRipple
+            onClick={handleClick}
+          >
+            <Box
+              component="img"
+              src={fallbackSrc}
+              alt={entity.name}
+              onError={handleImageError}
+              sx={{
+                width: '200px',
+                height: '200px',
+                objectFit: 'contain',
+              }}
+            />
+          </Button>
+        ) : (
+          <Box
+            component="img"
+            src={fallbackSrc}
+            alt={entity.name}
+            onError={handleImageError}
+            sx={{
+              width: '200px',
+              height: '200px',
+              objectFit: 'contain',
+              ":hover": {
+                cursor: 'default'
+              }
+            }}
+          />
+        )}
       </EntityTooltip>
       <ActionMenuAsMuiMenu
         anchorEl={anchorEl}
