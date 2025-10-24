@@ -16,7 +16,7 @@ export interface PanelEntity {
 }
 
 export interface Panel {
-  label: string
+  label?: string
   x: number
   y: number
   entities: PanelEntity[]

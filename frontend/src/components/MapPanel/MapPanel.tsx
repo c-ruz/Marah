@@ -46,44 +46,68 @@ function MapPanel({ panel }: PanelProps) {
           gridColumn: x + 1,
           gridRow: y + 1,
           borderRadius: '1em',
+          display: 'flex',
         }}
       >
-        <Button
-          disableRipple
-          variant="text"
-          size="small"
-          sx={{ width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'center', overflow: 'auto' }}
-          onClick={handleClick}
-          disabled={actions.concat(entities.flatMap(entity => entity.actions)).length === 0}
-        >
-          <Typography
-            variant="caption"
-            sx={{
-              p: 0.5,
-              fontSize: '1em',
-              position: 'absolute',
-              bottom: 4,
-              left: 4,
-            }}
+        {actions.length ? (
+          <Button
+            disableRipple
+            variant="text"
+            size="small"
+            sx={{ width: '100%', height: '100%', display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', padding: 1 }}
+            onClick={handleClick}
           >
-            {label}
-          </Typography>
-          {entities.map((entity, idx) => (
-            <Box
-              key={`${entity.name}_${idx}`}
-              sx={{
-                'transition': 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: `0 8px 20px -5px rgba(0,0,0,0.3)`,
-                },
-                'm': 1,
-              }}
+            {label && <Typography
+              variant="caption"
+              sx={{p: 0.5, fontSize: '1em', width: '100%',}}
             >
-              <EntityDisplay entity={entity} />
+              {label}
+            </Typography>}
+            <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'flex-start' }}>
+              {entities.map((entity, idx) => (
+                <Box
+                  key={`${entity.name}_${idx}`}
+                  sx={{
+                    'transition': 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: `0 8px 20px -5px rgba(0,0,0,0.3)`,
+                    },
+                    'm': 1,
+                  }}
+                >
+                  <EntityDisplay entity={entity} />
+                </Box>
+              ))}
             </Box>
-          ))}
-        </Button>
+          </Button>
+        ) : (
+          <Box sx={{ width: '100%', height: '100%', display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', padding: 1 }}>
+            {label && <Typography
+              variant="caption"
+              sx={{p: 0.5, fontSize: '1em', width: '100%', textAlign: 'center'}}
+            >
+              {label}
+            </Typography>}
+            <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignContent: 'flex-start' }}>
+              {entities.map((entity, idx) => (
+                <Box
+                  key={`${entity.name}_${idx}`}
+                  sx={{
+                    'transition': 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: `0 8px 20px -5px rgba(0,0,0,0.3)`,
+                    },
+                    'm': 1,
+                  }}
+                >
+                  <EntityDisplay entity={entity} />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
       </Paper>
       {actions.length > 0 && (
         <ActionMenuAsMuiMenu
