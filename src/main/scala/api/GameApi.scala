@@ -1,9 +1,9 @@
 package api
 
 import api.GameApi.{as, complete, entity, get, path, post}
-import api.types.base.grid.{GridGame, GridGameSnapshot}
 import api.types.base.Game
-import api.types.components.{Cell, CellEntity, CellEntityAttribute, ScoreView}
+import api.types.grid.components.{Cell, CellEntity, CellEntityAttribute, ScoreView}
+import api.types.grid.{GridGame, GridGameSnapshot}
 import controller.GameController
 import model.actions.Action
 import org.apache.pekko.actor.typed.ActorSystem
@@ -92,6 +92,7 @@ object GameApi extends Directives with JsonSupport {
           post {
             entity(as[String]) { actionId =>
               val action = controllerSnapshot.findActionById(actionId)
+              
               if (action.isDefined) {
                 val result: ActionResult = action.get.doAction(controller)
                 complete(result)

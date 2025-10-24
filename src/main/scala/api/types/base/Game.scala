@@ -1,6 +1,6 @@
 package api.types.base
 
-import api.types.components.ScoreView
+import api.types.grid.components.ScoreView
 import model.actions.Action
 
 trait Game {

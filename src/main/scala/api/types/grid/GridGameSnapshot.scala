@@ -1,7 +1,7 @@
-package api.types.base.grid
+package api.types.grid
 
 import api.types.base.ActionSnapshot
-import api.types.components.{Cell, ScoreView}
+import api.types.grid.components.{Cell, ScoreView}
 import model.actions.Action
 
 class GridGameSnapshot(gridGame: GridGame) extends GridGame, ActionSnapshot {
