@@ -10,5 +10,5 @@ object Clubs extends Suit {
     joker.applyClubs(score)
   }
 
-  override def toString: String = "♣"
+  override def toString: String = "Clubs"
 }

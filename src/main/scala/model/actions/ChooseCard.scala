@@ -11,6 +11,7 @@ class ChooseCard(card: Card) extends Action {
   def doAction(c: GameController): ActionResult = {
     c.chosenCards = c.chosenCards :+ card
     c.hand = c.hand.filterNot(_ == card)
+    c._topBarMessage = None
     Success("Card Chosen")
   }
 }

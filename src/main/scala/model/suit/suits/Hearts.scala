@@ -8,5 +8,5 @@ object Hearts extends Suit {
   override def applyScore(score: Score, joker: Joker): Score =
     joker.applyHearts(score)
 
-  override def toString: String = "♥"
+  override def toString: String = "Hearts"
 }

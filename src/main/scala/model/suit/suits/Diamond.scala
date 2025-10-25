@@ -8,5 +8,5 @@ object Diamond extends Suit {
   override def applyScore(score: Score, joker: Joker): Score =
     joker.applyDiamonds(score)
 
-  override def toString: String = "♦"
+  override def toString: String = "Diamonds"
 }

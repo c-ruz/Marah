@@ -1,11 +1,10 @@
 package controller
 
-import api.{ActionResult, Failure, Success}
-import api.types.grid.components.{Cell, CellEntity, CellEntityAttribute, ScoreView}
+import api.types.grid.components.{CellEntity, CellEntityAttribute, ScoreView}
 import api.types.stack.StackGame
 import api.types.stack.components.StackCell
-import model.actions.{Action, ChooseCard, Play, RemoveCard}
-import model.base.{Card, Score, Scorer}
+import model.actions.{Action, ChooseCard, Discard, Play, RemoveCard}
+import model.base.{Card, Score}
 import model.joker.Joker
 import model.joker.jokers.EvenSteven
 
@@ -16,7 +15,9 @@ class GameController extends StackGame {
   val jockers = List[Joker](
     new EvenSteven
   )
-  var _score = new Score(0, 1)
+  var _score = 0
+  
+  var _topBarMessage: Option[String] = None
 
   /**
    * Defines the direction the cells will be rendered.
@@ -37,13 +38,7 @@ class GameController extends StackGame {
         actions = List(),
         img = Some("joker.png")
       ),
-      actions = List(
-        new Action {
-          val name: String = "Dummy"
-
-          def doAction(c: GameController): ActionResult = Success("Dummy as Fuck")
-        }
-      ),
+      actions = List(),
       img = None
     ),
     StackCell(
@@ -54,7 +49,7 @@ class GameController extends StackGame {
         name = card.toString,
         attributes = List(),
         actions = List(new RemoveCard(card)),
-        img = None
+        img = Some(card.toString.replace(" ", "").toLowerCase + ".png")
       ),
       actions = List(),
       img = None
@@ -67,15 +62,9 @@ class GameController extends StackGame {
         name = card.toString,
         attributes = List(),
         actions = List(new ChooseCard(card)),
-        img = None
+        img = Some(card.toString.replace(" ", "").toLowerCase + ".png")
       ),
-      actions = List(
-        new Action {
-          val name: String = "Dummy"
-
-          def doAction(c: GameController): ActionResult = Success("Dummy")
-        }
-      ),
+      actions = List(),
       img = None
     )
   )
@@ -83,15 +72,14 @@ class GameController extends StackGame {
   /** List of [[ScoreView]] to be shown in the bottom menu.
    */
   def score: List[ScoreView] = List(
-    ScoreView("CHIPS", _score.chips.toString),
-    ScoreView("MULT", _score.multi.toString),
+    ScoreView("Total Score", _score.toString),
   )
   /** Message for feedback to the user, rendered in the top bar of the
    * visualizer. Use it to provide the user with directions regarding the
    * current state of the game.
    */
-  def topBarMessage: Option[String] = Some("Testing Malatro")
+  def topBarMessage: Option[String] = _topBarMessage
   /** List of [[Action]] to be shown in the bottom menu of the visualizer.
    */
-  def menuActions: List[Action] = List(new Play)
+  def menuActions: List[Action] = List(new Play, new Discard)
 }

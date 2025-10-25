@@ -10,6 +10,7 @@ class RemoveCard(card: Card) extends Action {
 
   def doAction(c: GameController): ActionResult = {
     c.chosenCards = c.chosenCards.filterNot(_ == card)
+    c.hand = c.hand :+ card
     Success("Card Removed")
   }
 }
