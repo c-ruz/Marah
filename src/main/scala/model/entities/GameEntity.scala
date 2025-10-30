@@ -10,9 +10,16 @@ trait GameEntity {
 
   def health: Int
   
+  def health_=(newHealth: Int): Unit
+  
   def currentHealth: Int
   
   def weight: Int
   
+  def currentActionBar: Int
+  def currentActionBar_=(newAB: Int): Unit
+  def actionBarString: String
+  
   def img: Option[String]
+  
 }
