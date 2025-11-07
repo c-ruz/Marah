@@ -94,8 +94,12 @@ object GameApi extends Directives with JsonSupport {
               val action = controllerSnapshot.findActionById(actionId)
               
               if (action.isDefined) {
-                val result: ActionResult = action.get.doAction(controller)
-                complete(result)
+                try {
+                  val result: ActionResult = action.get.doAction(controller)
+                  complete(result)
+                } catch {
+                  case e: Exception => complete(Failure(e.getMessage))
+                }
               } else {
                 complete(Failure(s"Action with ID $actionId was not found"))
               }
