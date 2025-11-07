@@ -112,6 +112,7 @@ class GameController extends GridGame {
           // The visitor changed our state because a choice is available.
           // We stop processing moves and wait for user input.
           println("A choice is available!")
+          Success("a")
         } else {
           // No special choice, continue the move loop
           processMove()
@@ -121,6 +122,7 @@ class GameController extends GridGame {
       case _ =>
         println("Multiple paths. Please choose a panel.")
         setState(new AwaitingPanelChoice())
+        Success("b")
     }
   }
 
