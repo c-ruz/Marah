@@ -9,5 +9,5 @@ trait Action {
   val id: String = UUID.randomUUID().toString
   val name: String
 
-  def doAction(c: GameController): ActionResult
+  def doAction(c: GameController): String
 }
