@@ -29,6 +29,6 @@ abstract class UnitCard(val name: String, val strength: Int)
   }
 
   override def attributes: List[CellEntityAttribute] = List(
-    CellEntityAttribute("Strength", strengthWithBuffs.toString)
+    CellEntityAttribute("Strength", strengthWithBuffs.toString),
   )
 }

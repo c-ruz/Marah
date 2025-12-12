@@ -79,21 +79,25 @@ class GameController extends StackGame {
    */
   def direction: Alignment = Vertical
 
+  private def cardToCellEntity(card: model.cards.Card): CellEntity = CellEntity(card.name, card.attributes, List(), Some(card.name.toLowerCase() + ".png"))
+
   def stack: List[StackCell] = List(
-    StackCell(label = Some("Hand"), entities = currentPlayer.hand.zipWithIndex.map((c, i) => CellEntity(c.name, c.attributes, List(new PlayCard(i)), None))),
+    StackCell(label = Some("Hand"), entities = currentPlayer.hand.zipWithIndex.map((c, i) => CellEntity(c.name, c.attributes, List(new PlayCard(i)), Some(c.name.toLowerCase() + ".png")))),
     StackCell(label = Some("Player 1 Siege Row"), entities = for card <- board.cards(player1.side, Siege)
-        yield CellEntity(card.name, List(CellEntityAttribute("Strength", card.strength.toString), CellEntityAttribute("Type", card.getClass.getSimpleName)), List(), None)),
+        yield cardToCellEntity(card)),
     StackCell(label = Some("Player 1 Ranged Row"), entities = for card <- board.cards(player1.side, Ranged)
-      yield CellEntity(card.name, card.attributes, List(), None)),
+      yield cardToCellEntity(card)),
     StackCell(label = Some("Player 1 Melee Row"), entities = for card <- board.cards(player1.side, Melee)
-      yield CellEntity(card.name, card.attributes, List(), None)),
-    StackCell(label = Some("Weather Slot"), entities = board.weatherSlotCard.map(c => CellEntity(c.name, c.attributes, List(), None))),
+      yield cardToCellEntity(card)),
+    StackCell(label = Some("Weather Slot"), entities = board.weatherSlotCard.map(c =>
+      cardToCellEntity(c)),
+    ),
     StackCell(label = Some("Player 2 Melee Row"), entities = for card <- board.cards(player2.side, Melee)
-      yield CellEntity(card.name, card.attributes, List(), None)),
+      yield cardToCellEntity(card)),
     StackCell(label = Some("Player 2 Ranged Row"), entities = for card <- board.cards(player2.side, Ranged)
-      yield CellEntity(card.name, card.attributes, List(), None)),
+      yield cardToCellEntity(card)),
     StackCell(label = Some("Player 2 Siege Row"), entities = for card <- board.cards(player2.side, Siege)
-      yield CellEntity(card.name, card.attributes, List(), None)),
+      yield cardToCellEntity(card)),
   )
 
   /** List of [[ScoreView]] to be shown in the bottom menu.

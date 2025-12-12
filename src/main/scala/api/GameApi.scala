@@ -101,7 +101,7 @@ object GameApi extends Directives with JsonSupport {
                   complete(Failure(s"Action with ID $actionId was not found"))
                 }
               } catch {
-                case e: Exception => complete(Failure(e.getMessage))
+                case e: Exception => complete(Failure(s"${e.getClass.getName} ${e.getMessage}"))
               }
             }
           }
