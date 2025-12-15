@@ -1,15 +1,12 @@
 package controller
 
 import api.types.grid.GridGame
-import api.{ActionResult, Success}
-import api.types.grid.components.{Cell, CellEntity, CellEntityAttribute, ScoreView}
-import api.types.stack.StackGame
-import api.types.stack.components.StackCell
+import api.types.grid.components.{Cell, CellEntity, ScoreView}
 import controller.states.{InitialState, State}
 import model.actions.Action
 import model.entities.GameEntity
 import model.entities.enemies.Enemy
-import model.entities.characters.{BlackMage, Character, Paladin, WhiteMage}
+import model.entities.characters.{BlackMage, Paladin, WhiteMage}
 import model.turns.TurnScheduler
 
 class GameController extends GridGame {
@@ -43,7 +40,7 @@ class GameController extends GridGame {
 
   /** List of [[Action]] to be shown in the bottom menu of the visualizer.
    */
-  def menuActions: List[Action] = List()
+  def menuActions: List[Action] = state.menuActions()
 
   /** Defines the grid to be rendered. First value defines the horizontal span
    * of the grid, second value defines the vertical span of the grid.
@@ -52,10 +49,5 @@ class GameController extends GridGame {
 
   /** List of [[Cell]] to be rendered inside the grid.
    */
-  def cells: List[Cell] = List(
-    Cell(None, 0, 1, List(CellEntity(name = "Enemy", attributes = List(), actions = List(), img = Some("bahamut.png"))), List(), None),
-    Cell(None, 2, 0, List(CellEntity(paladin.name, List(), List(), paladin.img)), List(), None),
-    Cell(None, 3, 1, List(CellEntity(blackMage.name, List(), List(), blackMage.img)), List(), None),
-    Cell(None, 2, 2, List(CellEntity(whiteMage.name, List(), List(), whiteMage.img)), List(), None)
-  )
+  def cells: List[Cell] = state.cells
 }

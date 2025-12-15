@@ -21,6 +21,6 @@ class Enemy(
   override def actionBarString: String = {
     val filled = "█" * (currentActionBar * 10 / weight)
     val empty = "░" * (10 - (currentActionBar * 10 / weight))
-    s"[$filled$empty]"
+    s"\t\t[$filled$empty] | $currentHealth/$health"
   }
 }
