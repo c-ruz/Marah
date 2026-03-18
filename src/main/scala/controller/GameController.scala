@@ -79,10 +79,10 @@ class GameController extends StackGame {
    */
   def direction: Alignment = Vertical
 
-  private def cardToCellEntity(card: model.cards.Card): CellEntity = CellEntity(card.name, card.attributes, List(), Some(card.name.toLowerCase() + ".png"))
+  private def cardToCellEntity(card: model.cards.Card): CellEntity = CellEntity(card.name, card.attributes, List(), Some(card.name.replace(" ", "").toLowerCase() + ".png"))
 
   def stack: List[StackCell] = List(
-    StackCell(label = Some("Hand"), entities = currentPlayer.hand.zipWithIndex.map((c, i) => CellEntity(c.name, c.attributes, List(new PlayCard(i)), Some(c.name.toLowerCase() + ".png")))),
+    StackCell(label = Some("Hand"), entities = currentPlayer.hand.zipWithIndex.map((c, i) => CellEntity(c.name, c.attributes, List(new PlayCard(i)), Some(c.name.replace(" ", "").toLowerCase() + ".png")))),
     StackCell(label = Some("Player 1 Siege Row"), entities = for card <- board.cards(player1.side, Siege)
         yield cardToCellEntity(card)),
     StackCell(label = Some("Player 1 Ranged Row"), entities = for card <- board.cards(player1.side, Ranged)
@@ -103,8 +103,8 @@ class GameController extends StackGame {
   /** List of [[ScoreView]] to be shown in the bottom menu.
    */
   def score: List[ScoreView] = List(
-    ScoreView("Red Side Life", life(player2).toString),
-    ScoreView("Blue Side Life", life(player1).toString)
+    ScoreView("Red Side Gems", life(player2).toString),
+    ScoreView("Blue Side Gems", life(player1).toString)
   )
 
   /** Message for feedback to the user, rendered in the top bar of the

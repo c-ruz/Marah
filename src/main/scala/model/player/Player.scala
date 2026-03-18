@@ -5,6 +5,7 @@ import model.cards.Card
 import model.cards.ranged.{Eita, ZeehRanged}
 import model.cards.siege.{ThiLing, ZeehSiege}
 import model.cards.melee.{Asmuth, WuQi}
+import model.cards.weather.{BitingFrost, ClearWeather}
 
 import java.util.UUID
 
@@ -29,7 +30,9 @@ class Player(val side: Side, val name: String = "") {
     ZeehSiege(),
     ThiLing(),
     ThiLing(),
-    ThiLing()
+    ThiLing(),
+    BitingFrost(),
+    ClearWeather()
   )
 
   def hand: List[Card] = _hand
