@@ -1,40 +1,53 @@
 package controller.states
 
 import api.{ActionResult, Success}
-import api.types.grid.components.{Cell, CellEntity}
-import api.types.stack.components.StackCell
+import api.types.grid.components.Cell
 import controller.GameController
-import model.actions.{Action, Target}
+import model.actions.Action
+import model.entities.GameEntity
 import model.entities.characters.Character
 import model.entities.enemies.Enemy
 
-class SelectTarget(a: Target) extends State {
+class SelectTarget(ctx: GameController) extends State {
 
-  def cells: List[Cell] = List(
-    Cell(None, 0, 1, List(CellEntity(name = "Enemy", attributes = List(), actions = List(
-      new Action {
-        val name: String = "Select Enemy"
+  private val attacker: GameEntity = ctx.currentTurn
 
-        def doAction(c: GameController): ActionResult = {
-          a.doToTarget(c, c.enemy)
-          Success("Attacked Enemy")
+  // If attacker is a Character, only Enemies are valid; otherwise only Characters
+  private val validTargets: Set[GameEntity] = attacker match {
+    case _: Character =>
+      ctx.allPanels.flatMap(_.entities).collect { case e: Enemy => e }.toSet
+    case _ =>
+      ctx.allPanels.flatMap(_.entities).collect { case c: Character => c }.toSet
+  }
+
+  private val cancelAction: Action = new Action {
+    val name: String = "Cancel"
+    def doAction(c: GameController): ActionResult = {
+      c.state = new InitialState(ctx)
+      Success("Attack cancelled")
+    }
+  }
+
+  def cells: List[Cell] = ctx.allPanels.map { panel =>
+    val base = panel.toCell
+    val updatedEntities = base.entities.zip(panel.entities).map { case (cellEntity, entity) =>
+      if (validTargets.contains(entity)) {
+        val attackAction = new Action {
+          val name: String = "Attack"
+          def doAction(c: GameController): ActionResult = {
+            val damage = math.max(0, attacker.attack - entity.defense)
+            entity.health -= damage
+            c.state = new InitialState(ctx)
+            Success(s"${attacker.name} attacked ${entity.name} for $damage damage!")
+          }
         }
-      }
-      
-    ), img = Some("bahamut.png"))), List(), None),
-    Cell(None, 2, 0, List(CellEntity(name = "Paladin", List(), List(), Some("paladin.png"))), List(), None),
-    Cell(None, 3, 1, List(CellEntity(name = "Black Mage", List(), List(), Some("black_mage.png"))), List(), None),
-    Cell(None, 2, 2, List(CellEntity(name= "White Mage", List(), List(), Some("white_mage.png"))), List(), None)
-  )
-
-  def menuActions(): List[Action] = List(
-    new Action {
-      val name: String = "Cancel"
-
-      def doAction(c: GameController): ActionResult = {
-        c.state = new InitialState
-        Success("Canceled")
+        cellEntity.copy(actions = List(attackAction))
+      } else {
+        cellEntity
       }
     }
-  )
+    base.copy(entities = updatedEntities)
+  }
+
+  def menuActions(): List[Action] = List(cancelAction)
 }

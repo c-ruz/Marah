@@ -2,7 +2,7 @@ package model.weapons
 
 import model.entities.characters.{BlackMage, WhiteMage}
 
-class Staff extends MagicWeapon ("Staff", 10, 10, 100) {
+class Staff(name: String = "Staff", attack: Int = 10, weight: Int = 10, magicAttack: Int = 100) extends MagicWeapon(name, attack, magicAttack, weight) {
 
   override def equipToBlackMage(b: BlackMage): Unit = {
     _owner = Some(b)

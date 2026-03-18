@@ -1,21 +1,22 @@
 package model.actions.attack
 
-import api.{ActionResult, Success}
+import api.{ActionResult, Failure, Success}
 import controller.GameController
 import controller.states.SelectTarget
-import model.actions.{Action, Target}
-import model.entities.enemies.Enemy
+import model.actions.Action
+import model.entities.characters.Character
 
-class Attack extends Action with Target {
+class Attack extends Action {
 
   val name: String = "Attack"
 
   def doAction(c: GameController): ActionResult = {
-    c.state = new SelectTarget(this)
-    Success("Select a target")
-  }
-
-  def doToTarget(c:GameController, e: Enemy): Unit = {
-    e.health = e.currentHealth - 10
+    c.currentTurn match {
+      case ch: Character if ch.weapon.isEmpty =>
+        Failure(s"${ch.name} has no weapon equipped")
+      case _ =>
+        c.state = new SelectTarget(c)
+        Success("Select a target")
+    }
   }
 }
