@@ -2,7 +2,7 @@ package controller
 
 import api.types.grid.components.{CellEntity, CellEntityAttribute, ScoreView}
 import api.types.stack.StackGame
-import api.types.stack.components.StackCell
+import api.types.stack.components.{StackCell, Alignment, Vertical}
 import model.actions.{Action, ChooseCard, Discard, Play, RemoveCard}
 import model.base.{Card, Score}
 import model.joker.Joker
@@ -23,7 +23,7 @@ class GameController extends StackGame {
    * Defines the direction the cells will be rendered.
    * It can be either "vertical" or "horizontal"
    */
-  def direction: "vertical" | "horizontal" = "vertical"
+  def direction: Alignment = Vertical
 
   /** List of [[Cell]] to be rendered inside the grid.
    */
