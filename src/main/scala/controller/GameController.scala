@@ -32,6 +32,11 @@ class GameController extends GridGame {
   private val scheduler = new TurnScheduler(entities = List(enemy, paladin, whiteMage, blackMage))
   var currentTurn: GameEntity = scheduler.nextTurn()
 
+  def advanceTurn(): Unit = {
+    currentTurn.currentActionBar = 0
+    currentTurn = scheduler.nextTurn()
+  }
+
   // --- Map (must be initialised before state) ---
 
   private val cols = 4

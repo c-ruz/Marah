@@ -28,6 +28,7 @@ class SelectEquipWeapon(ctx: GameController) extends State {
             def doAction(c: GameController): ActionResult = {
               try {
                 ch.equipWeapon(weapon)
+                c.advanceTurn()
                 c.state = new InitialState(ctx)
                 Success(s"${ch.name} equipped ${weapon.name}!")
               } catch {

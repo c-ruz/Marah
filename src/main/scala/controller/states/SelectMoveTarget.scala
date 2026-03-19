@@ -29,9 +29,11 @@ class SelectMoveTarget(ctx: GameController) extends State {
       val moveHere = new Action {
         val name: String = "Move here"
         def doAction(c: GameController): ActionResult = {
-          currentPanel.foreach(_.moveEntity(ctx.currentTurn, panel))
+          val mover = ctx.currentTurn
+          currentPanel.foreach(_.moveEntity(mover, panel))
+          c.advanceTurn()
           c.state = new InitialState(ctx)
-          Success(s"${ctx.currentTurn.name} moved to (${panel.x}, ${panel.y})")
+          Success(s"${mover.name} moved to (${panel.x}, ${panel.y})")
         }
       }
       base.copy(actions = List(moveHere))

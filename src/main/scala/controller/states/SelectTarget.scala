@@ -37,6 +37,7 @@ class SelectTarget(ctx: GameController) extends State {
           def doAction(c: GameController): ActionResult = {
             val damage = math.max(0, attacker.attack - entity.defense)
             entity.health -= damage
+            c.advanceTurn()
             c.state = new InitialState(ctx)
             Success(s"${attacker.name} attacked ${entity.name} for $damage damage!")
           }
