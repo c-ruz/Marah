@@ -5,7 +5,7 @@ import ActionMenuAsMuiMenu from '../ActionMenu/ActionMenuAsMuiMenu.tsx'
 import useGameStore from '../../store/GameStateStore.ts'
 import { styled } from '@mui/material/styles'
 
-const API_URL = 'http://localhost:8080'
+const API_URL = ''
 
 const EntityTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />

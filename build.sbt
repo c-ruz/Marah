@@ -33,6 +33,7 @@ buildFrontend := {
   val targetDir = base / "src" / "main" / "resources" / "public"
 
   log.info("🔧 Building frontend...")
+  IO.delete(outputDir)
   Process("npm install", frontendDir).!
   Process("npm run build", frontendDir).!
 

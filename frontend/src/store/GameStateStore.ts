@@ -21,7 +21,7 @@ interface GameStore {
   toggleActionMessage: () => void
 }
 
-const API_URL = 'http://localhost:8080'
+const API_URL = ''
 
 const useGameStore = create<GameStore>()(set => ({
   gameStateLoading: false,

@@ -5,7 +5,7 @@ import EntityDisplay from '../EntityDisplay/EntityDisplay.tsx'
 import ActionMenuAsMuiMenu from '../ActionMenu/ActionMenuAsMuiMenu.tsx'
 import useGameStore from '../../store/GameStateStore.ts'
 
-const API_URL = 'http://localhost:8080'
+const API_URL = ''
 
 interface PanelProps {
   panel: Panel
