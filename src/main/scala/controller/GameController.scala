@@ -13,8 +13,9 @@ import controller.states.kinds.{
 }
 import controller.visitor.{LandOn, PanelEffectVisitor, PassOver}
 import model.actions.Action
-import model.entities.PlayerCharacter
+import model.entities.{PlayerCharacter, WildUnit}
 import model.maps.Tutorial
+import model.normas.kinds.Norma6
 import model.panels.Panel
 
 class GameController extends GridGame {
@@ -38,7 +39,7 @@ class GameController extends GridGame {
   var chapter = 1
   private var _turn: Int = 0
   def turn: Int = _turn
-  def turn_=(t: Int): Unit = _turn = math.max(0, math.min(t, players.size - 1))
+  def turn_=(t: Int): Unit = _turn = ((t % players.size) + players.size) % players.size
   def currentPlayer: PlayerCharacter = players(turn)
 
   // moving
@@ -181,4 +182,82 @@ class GameController extends GridGame {
   /** List of [[Action]] to be shown in the bottom menu of the visualizer.
     */
   def menuActions: List[Action] = currentState.getActions(this)
+
+  /** Checks whether the player meets the requirements to advance their Norma.
+    * If so, advances the Norma level.
+    */
+  def normaCheck(player: PlayerCharacter): String = {
+    if (player.norma == Norma6) {
+      s"${player.name} has already reached Norma 6!"
+    } else {
+      val nextNorma = player.norma.nextNorma
+      if (player.stars >= nextNorma.requiredStars || player.wins >= nextNorma.requiredWins) {
+        player.advanceNorma()
+        s"Norma cleared! ${player.name} is now at Norma ${player.norma.value}."
+      } else {
+        "Norma requirements not yet met."
+      }
+    }
+  }
+
+  /** Resolves a full round of combat between a player and a Wild Unit.
+    * The player always attacks first. The Wild Unit randomly defends or evades.
+    * If the Wild Unit survives, it counterattacks and the player auto-defends.
+    */
+  def performCombat(player: PlayerCharacter, wildUnit: WildUnit): String = {
+    val log = new StringBuilder
+
+    // Player attacks first
+    val playerAtkRoll = player.rollDice()
+    val totalPlayerAtk = playerAtkRoll + player.attack
+    log.append(s"${player.name} attacks! Roll: $playerAtkRoll + ATK(${player.attack}) = $totalPlayerAtk\n")
+
+    // Wild Unit randomly chooses defend or evade
+    if (wildUnit.randomNumberGenerator.nextBoolean()) {
+      val defRoll = wildUnit.rollDice()
+      val totalDef = defRoll + wildUnit.defense
+      val damage = math.max(1, totalPlayerAtk - totalDef)
+      wildUnit.hp -= damage
+      log.append(s"${wildUnit.name} defends! Roll: $defRoll + DEF(${wildUnit.defense}) = $totalDef. Damage: $damage\n")
+    } else {
+      val evaRoll = wildUnit.rollDice()
+      val totalEva = evaRoll + wildUnit.evasion
+      if (totalEva > totalPlayerAtk) {
+        log.append(s"${wildUnit.name} evades! Roll: $evaRoll + EVA(${wildUnit.evasion}) = $totalEva vs $totalPlayerAtk\n")
+      } else {
+        wildUnit.hp -= totalPlayerAtk
+        log.append(s"${wildUnit.name} fails to evade. Takes $totalPlayerAtk damage.\n")
+      }
+    }
+
+    if (wildUnit.isDefeated) {
+      val gained = wildUnit.stars + wildUnit.bonusStars
+      player.stars += gained
+      player.wins += 1
+      log.append(s"${wildUnit.name} defeated! ${player.name} gains $gained stars and 1 win.\n")
+    } else {
+      log.append(s"${wildUnit.name} has ${wildUnit.hp} HP left. It counterattacks!\n")
+
+      // Wild Unit attacks back
+      val wuAtkRoll = wildUnit.rollDice()
+      val totalWuAtk = wuAtkRoll + wildUnit.attack
+      log.append(s"${wildUnit.name} attacks! Roll: $wuAtkRoll + ATK(${wildUnit.attack}) = $totalWuAtk\n")
+
+      // Player auto-defends
+      val playerDefRoll = player.rollDice()
+      val totalPlayerDef = playerDefRoll + player.defense
+      val playerDamage = math.max(1, totalWuAtk - totalPlayerDef)
+      player.hp -= playerDamage
+      log.append(s"${player.name} defends! Roll: $playerDefRoll + DEF(${player.defense}) = $totalPlayerDef. Damage: $playerDamage\n")
+
+      if (player.hp <= 0) {
+        val starsLost = player.stars / 2
+        wildUnit.stars += starsLost
+        player.stars -= starsLost
+        log.append(s"${player.name} is KO'd! Loses $starsLost stars to ${wildUnit.name}.\n")
+      }
+    }
+
+    log.toString()
+  }
 }
