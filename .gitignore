@@ -1,12 +1,24 @@
 *.class
 *.log
-target
 .idea
 .bsp
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /src/main/resources/public/vite.svg
-/project/
 src/main/resources/public/index.html
 src/main/resources/public/assets
 .DS_Store
+
+# Metals / Bloop (Scala build tooling)
+.metals/
+.bloop/
+.scala-build/
+
+# VSCode
+.vscode/
+
+# sbt
+target/
+project/target/
+project/project/
+project/metals.sbt
