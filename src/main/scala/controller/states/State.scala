@@ -10,4 +10,6 @@ trait State {
   def pass(c: GameController): Unit
   
   def getAvailableActions(c: GameController): List[Action]
+
+  def topBarMessage(c: GameController): Option[String] = None
 }

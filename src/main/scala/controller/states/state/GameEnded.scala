@@ -13,4 +13,7 @@ class GameEnded(winner: Player) extends GameState {
       new model.actions.PlayAgain()
     )
   }
+
+  override def topBarMessage(c: GameController): Option[String] =
+    Some(s"Game Over! ${winner.name} wins!")
 }

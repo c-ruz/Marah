@@ -111,7 +111,8 @@ class GameController extends StackGame {
    * visualizer. Use it to provide the user with directions regarding the
    * current state of the game.
    */
-  def topBarMessage: Option[String] = Some(s"Current player: ${currentPlayer.name}")
+  def topBarMessage: Option[String] =
+    state.topBarMessage(this).orElse(Some(s"Current player: ${currentPlayer.name}"))
 
   /** List of [[Action]] to be shown in the bottom menu of the visualizer.
    */
